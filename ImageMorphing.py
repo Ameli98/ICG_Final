@@ -70,6 +70,8 @@ def cal_X_prime(image1, lines_source, lines_destination):
         D_i = X_prime - X
         dist = np.abs(v)
         #dist = np.linalg.norm(v, axis=-1)
+        ''' 可以調整的參數
+        '''
         weight = cal_weight(np.linalg.norm(q-p), 1.0, 0.0001, dist, 1.0)
         Dsum += D_i * weight[..., np.newaxis]
         weightsum += weight
