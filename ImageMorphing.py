@@ -1,9 +1,30 @@
 import numpy as np 
 import cv2
-# reference https://blog.csdn.net/qq_32424059/article/details/100874358
-# refer to chatgpt
+import pandas as pd
+'''
+references
+https://blog.csdn.net/qq_32424059/article/details/1008743581
+chatgpt
+https://medium.com/@zhihaoshi1729/%E8%AE%80%E5%8F%96csv%E6%AA%94%E5%88%B0pandas-dataframe%E7%9A%84%E7%B0%A1%E6%98%93%E6%93%8D%E4%BD%9C-deecd2357f3f
+https://ithelp.ithome.com.tw/m/articles/10193421
+https://vocus.cc/article/62258b3efd89780001ce9272
+https://blog.csdn.net/weixin_38605247/article/details/78736417
+''' 
 img1 = cv2.imread('./Rie.jpg')
 img2 = cv2.imread('./Megumin.png')
+coordinates = pd.read_csv("./csv")
+len_of_point = len(coordinates)
+
+points = np.zeros((len_of_point, int(8)))
+for index, row in coordinates.iterrows():
+    points[index][0], points[index][1] = row['Src1'].strip('()').split(', ')
+    points[index][2], points[index][3] = row['Src2'].strip('()').split(', ')
+    points[index][4], points[index][5] = row['Dst1'].strip('()').split(', ')
+    points[index][6], points[index][7] = row['Dst2'].strip('()').split(', ')
+print(points)
+
+
+    
 
 width = img1.shape[1]
 height = img1.shape[0]
@@ -61,9 +82,9 @@ def cal_X_prime(image1, lines_source, lines_destination):
 
 
 
-def img_morphing(image1, image2, frames):
-    lines_source = [np.array([[5,10], [100, 105]])]
-    lines_destination = [np.array([[10, 30], [100, 190]])]
+def img_morphing(image1, image2, frames, points):
+    lines_source = [np.array([[points[i][0],points[i][1]], [points[i][2], points[i][3]]]) for i in range(len_of_point)]
+    lines_destination = [np.array([[points[i][4],points[i][5]], [points[i][6], points[i][7]]]) for i in range(len_of_point)]
     num_of_pairs = len(lines_source)
     for i in range(frames):
         mix = i / (frames - 1)
@@ -80,4 +101,4 @@ def img_morphing(image1, image2, frames):
     return 1
 
 
-img_morphing(img1, img2, int(5))
+img_morphing(img1, img2, int(100), points)
