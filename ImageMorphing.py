@@ -30,40 +30,33 @@ def cal_weight(length, p, a, dist, b):
     return ((length ** p)/ (a + dist)) ** b
 
 def cal_X_prime(image1, lines_source, lines_destination):
+    y_index, x_index = np.indices((height, width))
+    X = np.stack((y_index, x_index), axis=-1)
     transformed = np.zeros_like(image1)
-    for i in range(height):
-        for j in range(width):
-            X = np.array([i, j])
-            Dsum = np.array([0.0,0.0])
-            weightsum = 0.0
-            num_of_line = len(lines_source)
-            for k in range(num_of_line):
-                p = lines_destination[k][0]
-                q = lines_destination[k][1]
-                p_prime = lines_source[k][0]
-                q_prime = lines_source[k][1]
-                u = cal_u(X, p, q)
-                v = cal_v(X, p, q)
-                p_prime_q_prime = q_prime - p_prime
-                X_prime = p_prime + u * (q_prime-p_prime) + v * (np.array([-p_prime_q_prime[1], p_prime_q_prime[0]]))/np.linalg.norm(q_prime-p_prime)
-                D_i = X_prime - X
-                dist = np.linalg.norm(v)
-                weight = cal_weight(np.linalg.norm(u), 1.0, 0.0001, dist, 1.0)
-                
-                Dsum += D_i * weight
-                weightsum += weight
-            if weightsum != 0:
-                X_prime = X + Dsum / weightsum
-                X_prime = np.round(X_prime).astype(int)
-                if X_prime[0] >= height:
-                    X_prime[0] = height - 1
-                if X_prime[0] < 0 : 
-                    X_prime[0] = 0
-                if X_prime[1] >= width:
-                    X_prime[1] = width - 1
-                if X_prime[1] < 0 : 
-                    X_prime[1] = 0
-                transformed[i, j] = image1[X_prime[0], X_prime[1]]
+    Dsum = np.zeros_like(X, dtype=float)
+    weightsum = np.zeros((height, width), dtype=float)
+    num_of_line = len(lines_source)
+    for k in range(num_of_line):
+        p = lines_destination[k][0]
+        q = lines_destination[k][1]
+        p_prime = lines_source[k][0]
+        q_prime = lines_source[k][1]
+        u = cal_u(X, p, q)
+        v = cal_v(X, p, q)
+        dist = np.abs(v)
+        p_prime_q_prime = q_prime - p_prime
+        X_prime = p_prime + u[..., np.newaxis] * (q_prime-p_prime) + v[..., np.newaxis] * (np.array([-p_prime_q_prime[1], p_prime_q_prime[0]]))/np.linalg.norm(q_prime-p_prime)
+        D_i = X_prime - X
+        dist = np.abs(v)
+        #dist = np.linalg.norm(v, axis=-1)
+        weight = cal_weight(np.linalg.norm(q-p), 1.0, 0.0001, dist, 1.0)
+        Dsum += D_i * weight[..., np.newaxis]
+        weightsum += weight
+        X_prime = X + Dsum / weightsum[..., np.newaxis]
+        X_prime=np.round(X_prime).astype(int)
+        X_prime = np.clip(X_prime, 0, [height-1, width -1])
+        transformed[y_index, x_index] = image1[X_prime[..., 0], X_prime[..., 1]]
+        
     return transformed
 
 
