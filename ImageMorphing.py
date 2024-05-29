@@ -66,9 +66,10 @@ if __name__ == "__main__":
     parser.add_argument("Csv", help="Line Pair Data")
     parser.add_argument("OutVideo", help="Output video path")
     args = parser.parse_args()
+    # swap the input and output
+    img2 = cv2.imread(args.SrcImage)
+    img1 = Image.open(args.DstImage)
 
-    img1 = cv2.imread(args.SrcImage)
-    img2 = Image.open(args.DstImage)
     img2 = img2.resize((img1.shape[1], img1.shape[0]))
     img2 = cv2.cvtColor(np.array(img2), cv2.COLOR_RGB2BGR)
     points = pd.read_csv(args.Csv)
