@@ -67,8 +67,8 @@ if __name__ == "__main__":
     parser.add_argument("OutVideo", help="Output video path")
     args = parser.parse_args()
     # swap the input and output
-    img2 = cv2.imread(args.SrcImage)
-    img1 = Image.open(args.DstImage)
+    img2 = cv2.imread(args.DstImage)
+    img1 = Image.open(args.SrcImage)
 
     img1 = img1.resize((img2.shape[1], img2.shape[0]))
     img1 = cv2.cvtColor(np.array(img1), cv2.COLOR_RGB2BGR)
