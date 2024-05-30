@@ -70,10 +70,10 @@ if __name__ == "__main__":
     img2 = cv2.imread(args.SrcImage)
     img1 = Image.open(args.DstImage)
 
-    img2 = img2.resize((img1.shape[1], img1.shape[0]))
-    img2 = cv2.cvtColor(np.array(img2), cv2.COLOR_RGB2BGR)
+    img1 = img1.resize((img2.shape[1], img2.shape[0]))
+    img1 = cv2.cvtColor(np.array(img1), cv2.COLOR_RGB2BGR)
     points = pd.read_csv(args.Csv)
     points = np.array(points.values)
     len_of_point = len(points)
 
-    img_morphing(img1, img2, 100, points)
+    img_morphing(img2, img1, 100, points)
