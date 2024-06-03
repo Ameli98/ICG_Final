@@ -1,9 +1,7 @@
 import numpy as np 
 import cv2
-from PIL import Image
 import pandas as pd
 import argparse
-from tqdm import tqdm
 
 
 def cal_u(X, P, Q):
@@ -49,7 +47,7 @@ def img_morphing(image1, image2, frames, points):
     lines_source, lines_destination = points[:, :4], points[:, 4:]
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     Video = cv2.VideoWriter(args.OutVideo, fourcc, 60, (image1.shape[1], image1.shape[0]))
-    for i in tqdm(range(frames)):
+    for i in range(frames):
         mix = i / (frames - 1)
         interpolation_line = lines_source * (1 - mix) + lines_destination * mix
         trans_source = cal_X_prime(image1, lines_source, interpolation_line)
@@ -67,10 +65,10 @@ if __name__ == "__main__":
     parser.add_argument("OutVideo", help="Output video path")
     args = parser.parse_args()
     # swap the input and output
+    img1 = cv2.imread(args.SrcImage)
     img2 = cv2.imread(args.DstImage)
-    img1 = Image.open(args.SrcImage)
 
-    img1 = img1.resize((img2.shape[1], img2.shape[0]))
+    img1 = cv2.resize(img1, (img2.shape[1], img2.shape[0]), interpolation=cv2.INTER_CUBIC)
     img1 = cv2.cvtColor(np.array(img1), cv2.COLOR_RGB2BGR)
     points = pd.read_csv(args.Csv)
     points = np.array(points.values)
