@@ -41,11 +41,11 @@ def Harmonization(Image, Mask):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("InputPath")
-    parser.add_argument("OutputPath")
+    parser.add_argument("InputImage")
+    parser.add_argument("OutputVideo")
     args = parser.parse_args()
 
-    InputImage = cv2.imread(args.InputPath)
+    InputImage = cv2.imread(args.InputImage)
     Label, ColorBlock = Segmentation(InputImage)
     ColorBlock = 0.4 * ColorBlock
     PresentImage = cv2.add(InputImage, ColorBlock.astype(np.uint8))
@@ -66,4 +66,15 @@ if __name__ == "__main__":
         Mask[Label == l] = True
 
     OutputImage = Harmonization(InputImage, Mask)
-    cv2.imwrite(args.OutputPath, OutputImage)
+
+    # Write video
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    Video = cv2.VideoWriter(args.OutputVideo, fourcc, 60, (InputImage.shape[1], InputImage.shape[0]))
+    NFrame = 100
+
+    for i in range(NFrame + 1):
+        Weight = i / NFrame
+        Frame = (1 - Weight) * InputImage + Weight * OutputImage
+        Video.write(Frame.astype(np.uint8))
+    
+    Video.release()

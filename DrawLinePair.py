@@ -98,20 +98,9 @@ if __name__ == "__main__":
     parser.add_argument("csv", help="Feature Line Pair Data")
     args = parser.parse_args()
 
-    print("Loading images...")
     SrcImage = cv2.imread(args.src)
     DstImage = cv2.imread(args.dst)
     DstImage = cv2.resize(DstImage, (SrcImage.shape[1], SrcImage.shape[0]), interpolation=cv2.INTER_CUBIC)
-
-    if SrcImage is None:
-        print(f"Error: The source image '{args.src}' could not be loaded.")
-        exit()
-
-    if DstImage is None:
-        print(f"Error: The destination image '{args.dst}' could not be loaded.")
-        exit()
-
-    print("Images loaded successfully.")
 
     cv2.namedWindow('SrcImage')
     cv2.setMouseCallback('SrcImage', DrawImage, (SrcImage, True))
