@@ -28,7 +28,7 @@ python3 ImageMorphing.py <Source Image> <Destination Image> <Feature pair csv fi
 ### Color Harmonization
 You can choose which parts you want to color harmonize with left click.
 ```
-python3 Harmoniztion.py <Source Image> <Output Video>
+python3 Harmonization.py <Source Image> <Output Video>
 ```
 
 ### Video Concatenation
