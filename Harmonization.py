@@ -76,5 +76,4 @@ if __name__ == "__main__":
         Weight = i / NFrame
         Frame = (1 - Weight) * InputImage + Weight * OutputImage
         Video.write(Frame.astype(np.uint8))
-    
     Video.release()

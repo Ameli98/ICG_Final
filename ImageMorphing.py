@@ -53,7 +53,6 @@ def img_morphing(image1, image2, frames, points):
         trans_source = cal_X_prime(image1, lines_source, interpolation_line)
         trans_destination = cal_X_prime(image2, lines_destination, interpolation_line)
         final_img = trans_source * (1 - mix) + trans_destination * mix
-        # cv2.imwrite(f'./mid_{i}.png', final_img)
         Video.write(final_img.astype(np.uint8))
     Video.release()
 
@@ -69,9 +68,8 @@ if __name__ == "__main__":
     img2 = cv2.imread(args.DstImage)
 
     img1 = cv2.resize(img1, (img2.shape[1], img2.shape[0]), interpolation=cv2.INTER_CUBIC)
-    img1 = cv2.cvtColor(np.array(img1), cv2.COLOR_RGB2BGR)
     points = pd.read_csv(args.Csv)
     points = np.array(points.values)
     len_of_point = len(points)
 
-    img_morphing(img2, img1, 100, points)
+    img_morphing(img1, img2, 100, points)

@@ -41,3 +41,8 @@ python3 ImageMorphing.py <Source Image> <Destination Image> <Feature pair csv fi
 python3 Harmoniztion.py <Destination Image> <Output Video 2>
 bash concat.sh <Output Video 1> <Output Video 2> <Concatenated video>
 ```
+
+## Division of the work
+B08504098 : Interface of drawing line pairs, Segmentation, Color harmonization, and Report.
+B10902115 : Main structure of Image Morphing and Report.
+41173058H : Draw line pairs and Code testing.
