@@ -46,3 +46,9 @@ bash concat.sh <Output Video 1> <Output Video 2> <Concatenated video>
 B08504098 : Interface of drawing line pairs, Segmentation, Color harmonization, and Report.
 B10902115 : Main structure of Image Morphing and Report.
 41173058H : Draw line pairs and Code testing.
+
+## My Contributions
+- Implemented the interactive GUI for drawing feature line pairs using OpenCV
+- Developed image segmentation workflow for region-based color processing
+- Designed and implemented the color harmonization algorithm in HSV color space
+- Integrated the harmonization results into the morphing video pipeline
